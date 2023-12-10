@@ -18,6 +18,7 @@ COPY save_models.py ./
 RUN --mount=type=cache,target=${TRANSFORMERS_CACHE} \
      poetry run python save_models.py
 
+RUN poetry run python -c "import nltk; nltk.download('punkt');"
 
 FROM python:3.11-slim
 
@@ -29,6 +30,7 @@ WORKDIR /app
 
 COPY --from=backend-builder ${AI_MODELS} ${AI_MODELS}
 COPY --from=backend-builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+COPY --from=backend-builder /root/nltk_data /root/nltk_data
 COPY ./data ./data
 COPY ./ai ./ai
 COPY ./web ./web

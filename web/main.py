@@ -9,12 +9,19 @@ app = FastAPI()
 search = MethodSimilarity()
 emotional = Emotional()
 
+default_aspects = search.aspects_list
+
 class Item(BaseModel):
     text: str
+    aspects_list: list|None = None
 
 @app.post("/")
 async def root(item: Item):
     text = item.text
+    if item.aspects_list:
+        search.set_aspects(item.aspects_list)
+    else:
+        search.set_aspects(default_aspects)
     result = {}
     all_aspects = search.process(text)
     for aspect, sentences in all_aspects.items():

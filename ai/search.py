@@ -12,7 +12,7 @@ ASPECTS_FILE = "data/aspects.txt"
 
 def load_aspects():
     if pathlib.Path(ASPECTS_FILE).exists():
-        with open(ASPECTS_FILE) as f:
+        with open(ASPECTS_FILE, encoding="UTF-8") as f:
             aspects = f.read().split('\n')
     else:
         aspects = []
@@ -34,8 +34,14 @@ def clean_text(text: str):
 
 class MethodSubstring():
 
+    def set_aspects(self, aspects_list=None):
+        if aspects_list is not None:
+            self.aspects_list = aspects_list
+        else:
+            self.aspects_list = load_aspects()
+
     def __init__(self):
-        self.aspects_list = load_aspects()
+        self.set_aspects(None)
 
     def find_aspects(self, text: str):
         aspects = {}
@@ -63,21 +69,28 @@ class MethodSubstring():
 class MethodSimilarity():
 
     def transformers_tokenizer(self, sentence: str) -> torch.Tensor:
-        tokens = self.transformers_tokenizer(sentence, return_tensors='pt')
+        tokens = self.transformers_auto_tokenizer(sentence, return_tensors='pt')
         vector = self.transformers_model(**tokens)[0].detach().squeeze()
         return torch.mean(vector, dim=0).numpy()
 
+    def set_aspects(self, aspects_list=None):
+        if aspects_list is not None:
+            self.aspects_list = aspects_list
+        else:
+            self.aspects_list = load_aspects()
+
     def __init__(self, tokenizer="distiluse"):
+        self.set_aspects(None)
 
         self.aspects_list = load_aspects()
 
         if tokenizer == "distiluse":
             self.tokenizer = self.transformers_tokenizer
-            self.transformers_tokenizer = AutoTokenizer.from_pretrained("ai_models/sentence-transformers/distiluse-base-multilingual-cased-v2", local_files_only=True)
+            self.transformers_auto_tokenizer = AutoTokenizer.from_pretrained("ai_models/sentence-transformers/distiluse-base-multilingual-cased-v2", local_files_only=True)
             self.transformers_model = AutoModel.from_pretrained("ai_models/sentence-transformers/distiluse-base-multilingual-cased-v2", local_files_only=True)
         elif tokenizer == "sbert-pq":
             self.tokenizer = self.transformers_tokenizer
-            self.transformers_tokenizer = AutoTokenizer.from_pretrained("ai_models/inkoziev/sbert_pq", local_files_only=True)
+            self.transformers_auto_tokenizer = AutoTokenizer.from_pretrained("ai_models/inkoziev/sbert_pq", local_files_only=True)
             self.transformers_model = AutoModel.from_pretrained("ai_models/inkoziev/sbert_pq", local_files_only=True)
         else:
             self.tokenizer = None
