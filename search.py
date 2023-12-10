@@ -1,9 +1,10 @@
 import re
 
 import torch
-import nltk
 import numpy as np
 from transformers import AutoTokenizer, AutoModel
+
+from sentence_tokenizer import nltk_sentence_tokenizer as get_sentences
 
 
 def load_aspects():
@@ -23,10 +24,6 @@ def clean_text(text: str):
     # Убираем пробелы в начале и в конце строки
     clean = clean.strip().lower()
     return clean
-
-def get_sentences(text: str):
-    # Токенизация
-    return nltk.sent_tokenize(text, language="russian")
 
 
 class MethodSubstring():
