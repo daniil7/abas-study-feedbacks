@@ -11,6 +11,9 @@ fastapi = "^0.104.1"
 transformers = "^4.35.2"
 torch = "^2.1.1"
 uvicorn = "^0.24.0.post1"
+sentence-transformers = "^2.2.2"
+nltk = "^3.8.1"
+numpy = "^1.26.2"
 
 
 [tool.poetry.group.dev.dependencies]
