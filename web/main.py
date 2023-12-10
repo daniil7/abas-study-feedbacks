@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-from search import MethodSimilarity
-from emotional import Emotional
+from ai.search import MethodSimilarity
+from ai.emotional import Emotional
 
 app = FastAPI()
 

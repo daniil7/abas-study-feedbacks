@@ -6,7 +6,7 @@ import numpy as np
 from transformers import AutoTokenizer, AutoModel
 from pymorphy2 import MorphAnalyzer
 
-from sentence_tokenizer import nltk_sentence_tokenizer as get_sentences
+from ai.sentence_tokenizer import nltk_sentence_tokenizer as get_sentences
 
 ASPECTS_FILE = "data/aspects.txt"
 

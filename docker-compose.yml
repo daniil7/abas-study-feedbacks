@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+    app:
+        image: keytokens-analysis-app
+        container_name: keytokens-analysis-app
+        restart: unless-stopped
+        build:
+            context: .
+            dockerfile: docker/app/Dockerfile-app
+        ports:
+            - 8000:80
