@@ -5,6 +5,7 @@ import nltk
 import numpy as np
 from transformers import AutoTokenizer, AutoModel
 
+
 def load_aspects():
     with open("data/aspects.txt") as f:
         aspects = f.read().split('\n')
