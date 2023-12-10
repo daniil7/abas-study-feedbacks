@@ -1,15 +1,21 @@
 import re
+import pathlib
 
 import torch
 import numpy as np
 from transformers import AutoTokenizer, AutoModel
+from pymorphy2 import MorphAnalyzer
 
 from sentence_tokenizer import nltk_sentence_tokenizer as get_sentences
 
+ASPECTS_FILE = "data/aspects.txt"
 
 def load_aspects():
-    with open("data/aspects.txt") as f:
-        aspects = f.read().split('\n')
+    if pathlib.Path(ASPECTS_FILE).exists():
+        with open(ASPECTS_FILE) as f:
+            aspects = f.read().split('\n')
+    else:
+        aspects = []
     return aspects
 
 def clean_text(text: str):
@@ -41,7 +47,6 @@ class MethodSubstring():
         sentences_words = []
         for sentence in sentences:
             words = clean_text(sentence).split(" ")
-            words = [token for token in words if token not in stopwords]
             sentences_words.append(words)
         # Лемматизация
         morph = MorphAnalyzer()
@@ -66,17 +71,17 @@ class MethodSimilarity():
 
         self.aspects_list = load_aspects()
 
-        if tokenizer == "distiluse": # Хорошо
+        if tokenizer == "distiluse":
             self.tokenizer = self.transformers_tokenizer
             self.transformers_tokenizer = AutoTokenizer.from_pretrained("ai_models/sentence-transformers/distiluse-base-multilingual-cased-v2", local_files_only=True)
             self.transformers_model = AutoModel.from_pretrained("ai_models/sentence-transformers/distiluse-base-multilingual-cased-v2", local_files_only=True)
-        elif tokenizer == "sbert-pq": # Средне
+        elif tokenizer == "sbert-pq":
             self.tokenizer = self.transformers_tokenizer
             self.transformers_tokenizer = AutoTokenizer.from_pretrained("ai_models/inkoziev/sbert_pq", local_files_only=True)
             self.transformers_model = AutoModel.from_pretrained("ai_models/inkoziev/sbert_pq", local_files_only=True)
         else:
             self.tokenizer = None
-            raise Exception("Invalid tokenizer. Available: spacy, rubert")
+            raise Exception("Invalid tokenizer.")
 
     def calc_similarity(self, vector1, vector2):
         return np.dot(vector1, vector2) / \
@@ -94,7 +99,7 @@ class MethodSimilarity():
             similarities = [(aspect, self.calc_similarity(self.tokenizer(aspect), sentence_vector))
                               for aspect in self.aspects_list]
             similarities.sort(key=lambda x: x[1], reverse=True)
-            if similarities[0][1] > min_similarity:
+            if similarities and similarities[0][1] > min_similarity:
                 aspects[similarities[0][0]].append(sentence)
         return aspects
 
