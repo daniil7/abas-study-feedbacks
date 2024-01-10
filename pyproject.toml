@@ -14,11 +14,11 @@ sentence-transformers = "^2.2.2"
 nltk = "^3.8.1"
 numpy = "^1.26.2"
 pymorphy2 = "^0.9.1"
-torch = {version = "^2.1.1+cpu", source = "torch_cpu"}
+torch = {version = "^2.1.1+cu118", source = "torch_cuda"}
 
 [[tool.poetry.source]]
-name = "torch_cpu"
-url = "https://download.pytorch.org/whl/cpu/"
+name = "torch_cuda"
+url = "https://download.pytorch.org/whl/cu118"
 priority = "supplemental"
 
 [tool.poetry.group.dev.dependencies]

@@ -4,7 +4,7 @@ import pathlib
 import torch
 import numpy as np
 from transformers import AutoTokenizer, AutoModel
-from pymorphy2 import MorphAnalyzer
+# from pymorphy2 import MorphAnalyzer
 
 from ai.sentence_tokenizer import nltk_sentence_tokenizer as get_sentences
 
@@ -32,39 +32,39 @@ def clean_text(text: str):
     return clean
 
 
-class MethodSubstring():
-
-    def set_aspects(self, aspects_list=None):
-        if aspects_list is not None:
-            self.aspects_list = aspects_list
-        else:
-            self.aspects_list = load_aspects()
-
-    def __init__(self):
-        self.set_aspects(None)
-
-    def find_aspects(self, text: str):
-        aspects = {}
-        for aspect in self.aspects_list:
-            aspects[aspect] = []
-        # Разделение на предложения
-        sentences = get_sentences(text)
-        # Очистка
-        sentences_words = []
-        for sentence in sentences:
-            words = clean_text(sentence).split(" ")
-            sentences_words.append(words)
-        # Лемматизация
-        morph = MorphAnalyzer()
-        for sentence_idx in range(len(sentences_words)):
-            lemmatized = [morph.parse(word)[0].normal_form for word in sentences_words[sentence_idx]]
-            for aspect in self.aspects_list:
-                if aspect in lemmatized:
-                    aspects[aspect].append(sentences[sentence_idx])
-        return aspects
-
-    def process(self, text: str):
-        return self.find_aspects(text)
+# class MethodSubstring():
+# 
+#     def set_aspects(self, aspects_list=None):
+#         if aspects_list is not None:
+#             self.aspects_list = aspects_list
+#         else:
+#             self.aspects_list = load_aspects()
+# 
+#     def __init__(self):
+#         self.set_aspects(None)
+# 
+#     def find_aspects(self, text: str):
+#         aspects = {}
+#         for aspect in self.aspects_list:
+#             aspects[aspect] = []
+#         # Разделение на предложения
+#         sentences = get_sentences(text)
+#         # Очистка
+#         sentences_words = []
+#         for sentence in sentences:
+#             words = clean_text(sentence).split(" ")
+#             sentences_words.append(words)
+#         # Лемматизация
+#         morph = MorphAnalyzer()
+#         for sentence_idx in range(len(sentences_words)):
+#             lemmatized = [morph.parse(word)[0].normal_form for word in sentences_words[sentence_idx]]
+#             for aspect in self.aspects_list:
+#                 if aspect in lemmatized:
+#                     aspects[aspect].append(sentences[sentence_idx])
+#         return aspects
+# 
+#     def process(self, text: str):
+#         return self.find_aspects(text)
 
 class MethodSimilarity():
 
@@ -111,9 +111,12 @@ class MethodSimilarity():
             sentence_vector = self.tokenizer(sentence)
             similarities = [(aspect, self.calc_similarity(self.tokenizer(aspect), sentence_vector))
                               for aspect in self.aspects_list]
-            similarities.sort(key=lambda x: x[1], reverse=True)
-            if similarities and similarities[0][1] > min_similarity:
-                aspects[similarities[0][0]].append(sentence)
+            # similarities.sort(key=lambda x: x[1], reverse=True)
+            # if similarities and similarities[0][1] > min_similarity:
+            #     aspects[similarities[0][0]].append(sentence)
+            for similarity in similarities:
+                if similarity[1] > min_similarity:
+                    aspects[similarity[0]].append(sentence)
         return aspects
 
     def process(self, text: str, min_similarity: int = 0.2):
