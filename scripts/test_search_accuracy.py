@@ -8,11 +8,20 @@ import pathlib
 import torch
 import numpy as np
 from transformers import AutoTokenizer, AutoModel
-from pymorphy2 import MorphAnalyzer
+from natasha import Segmenter, MorphVocab, NewsEmbedding, NewsMorphTagger, Doc
+
+
+from sklearn.metrics import multilabel_confusion_matrix
+from sklearn.preprocessing import MultiLabelBinarizer
 
 # Подгружаем все размеченные аспекты из файлов и сохраняем в памяти
 
 DATA_DIRECTORY = "stage_2_keywords_search/search_annotated/"
+
+segmenter = Segmenter()
+morph_vocab = MorphVocab()
+emb = NewsEmbedding()
+morph_tagger = NewsMorphTagger(emb)
 
 # Предварительно удаляем расщирение .txt
 aspect_file_names = [
@@ -27,21 +36,13 @@ actual_aspects_sentences = {}
 # Список всех уникальных предложений
 all_aspects_senteces = []
 for file_name in aspect_file_names:
-    if file_name != "мусор":
-        with open(DATA_DIRECTORY+file_name+".txt", "r", encoding="utf-8") as f:
-            actual_aspects_sentences[file_name] = f.read().split('\n')
-            all_aspects_senteces += actual_aspects_sentences[file_name]
-all_aspects_senteces = list(set(all_aspects_senteces))
+    with open(DATA_DIRECTORY+file_name+".txt", "r", encoding="utf-8") as f:
+        actual_aspects_sentences[file_name] = set(f.read().split('\n'))
+        all_aspects_senteces += actual_aspects_sentences[file_name]
 
-# Если правильно отнесли +1, неправильно отнесли/не отнесли когда требовалось -1
-def calc_acc(aspects: list, sentence: str) -> int:
-    result = 0
-    for aspect, sentences in actual_aspects_sentences.items():
-        if aspect in aspects and sentence in sentences:
-            result += 1
-        if (aspect not in aspects) ^ (sentence not in sentences): # xor
-            result -= 1
-    return result
+all_aspects_senteces = list(set(all_aspects_senteces))
+actual_aspects_sentences.pop("мусор")
+
 
 def load_aspects():
     return aspect_file_names
@@ -77,8 +78,15 @@ class MethodSubstring():
         # Очистка
         sentence_words = clean_text(sentence).split(" ")
         # Лемматизация
-        morph = MorphAnalyzer()
-        lemmatized = [morph.parse(word)[0].normal_form for word in sentence_words]
+        doc = Doc(sentence)
+        doc.segment(segmenter)
+        doc.tag_morph(morph_tagger)
+
+        for token in doc.tokens: 
+            token.lemmatize(morph_vocab)
+        
+        lemmatized = [token.lemma for token in doc.tokens]
+        
         for aspect in self.aspects_list:
             if aspect in lemmatized:
                 aspects.append(aspect)
@@ -144,8 +152,26 @@ similarity_acc_list = []
 
 print("Initialized")
 
-for sentence in all_aspects_senteces:
-    aspects = search_substring.process(sentence)
-    substring_acc_list.append(calc_acc(aspects, sentence))
+method = search_similarity
 
-print(substring_acc_list)
+y_expected = []
+y_predicted = []
+
+for sentence in all_aspects_senteces:
+    y_expected.append(
+        [
+            aspect
+            for aspect in actual_aspects_sentences
+            if sentence in actual_aspects_sentences[aspect]
+        ]
+    )
+    y_predicted.append(method.process(sentence))
+
+y_expected = MultiLabelBinarizer(classes=list(actual_aspects_sentences)).fit_transform(y_expected)
+y_predicted = MultiLabelBinarizer(classes=list(actual_aspects_sentences)).fit_transform(y_predicted)
+    
+
+print(y_expected.shape)
+print(y_predicted.shape)
+
+print(multilabel_confusion_matrix(y_expected, y_predicted))
