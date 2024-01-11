@@ -11,7 +11,7 @@ from transformers import AutoTokenizer, AutoModel
 from natasha import Segmenter, MorphVocab, NewsEmbedding, NewsMorphTagger, Doc
 
 
-from sklearn.metrics import multilabel_confusion_matrix
+from sklearn.metrics import multilabel_confusion_matrix, classification_report
 from sklearn.preprocessing import MultiLabelBinarizer
 
 # Подгружаем все размеченные аспекты из файлов и сохраняем в памяти
@@ -170,7 +170,7 @@ class MethodSimilarity():
 search_substring = MethodSubstring()
 substring_acc_list = []
 
-search_similarity = MethodSubstring()
+search_similarity = MethodSimilarity()
 similarity_acc_list = []
 
 print("Initialized")
@@ -193,15 +193,5 @@ for sentence in all_aspects_senteces:
 y_expected = MultiLabelBinarizer(classes=list(actual_aspects_sentences)).fit_transform(y_expected)
 y_predicted = MultiLabelBinarizer(classes=list(actual_aspects_sentences)).fit_transform(y_predicted)
     
-
-print(y_expected.shape)
-print(y_predicted.shape)
-cm = multilabel_confusion_matrix(y_expected, y_predicted)
-
-# print class name and cm[class] for each class
-
-for i, aspect in enumerate(actual_aspects_sentences):
-    print(aspect)
-    print(cm[i])
-    print()
-
+report = classification_report(y_expected, y_predicted, target_names=list(actual_aspects_sentences))
+print(report)
