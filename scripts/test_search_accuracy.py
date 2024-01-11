@@ -45,7 +45,7 @@ actual_aspects_sentences.pop("мусор")
 
 
 def load_aspects():
-    return aspect_file_names
+    return list(actual_aspects_sentences.keys())
 
 def clean_text(text: str):
     # Убираем ссылки
@@ -63,6 +63,28 @@ def clean_text(text: str):
 # TODO сделать поддержку синонимов
 
 class MethodSubstring():
+    dictionary = {
+        "материал информация": ["материал", "информация", "теория"],
+        "домашняя работа": ["домашняя работа", "домашнее задание", "дз", "домашка", "д/з"],
+        "зачёт": ["зачет", "зачёт", "экзамен", "комиссия", "закрыться"],
+        "фильмы": ["фильм", "кино"],
+        "презентации": ["презентация", "преза"],
+        "онлайн-курс": ["онлайн-курс", "дистанционно", "онлайн"],
+        "видео-уроки": ["видео-урок", "видеоурок", "видео", "видео-лекция", "видеолекция"],
+        "преподаватель": ["преподаватель", "препод"],
+        "выступления": ["выступление", "выступать"],
+        "литература": ["литература", "книга"],
+        "тесты": ["тест", "тестирование"],
+        "практики семинары": ["практика", "семинар", "практическая"],
+        "доклады": ["доклад"],
+        "задания задачи": ["задание", "задача"],
+        "баллы": ["балл", "оценка"],
+        "эссе": ["эссе", "сочинение"],
+        "проекты": ["проект", "проектная работа"],
+        "игры" : ["игра"],
+        "лекции": ["лекция"],
+    }
+
 
     def set_aspects(self, aspects_list=None):
         if aspects_list is not None:
@@ -85,11 +107,12 @@ class MethodSubstring():
         for token in doc.tokens: 
             token.lemmatize(morph_vocab)
         
-        lemmatized = [token.lemma for token in doc.tokens]
+        lemmatized = ' '.join(token.lemma for token in doc.tokens)
         
         for aspect in self.aspects_list:
-            if aspect in lemmatized:
-                aspects.append(aspect)
+            for word in self.dictionary[aspect]:
+                if word in lemmatized:
+                    aspects.append(aspect)
         return aspects
 
     def process(self, text: str):
@@ -152,7 +175,7 @@ similarity_acc_list = []
 
 print("Initialized")
 
-method = search_similarity
+method = search_substring
 
 y_expected = []
 y_predicted = []
@@ -181,3 +204,4 @@ for i, aspect in enumerate(actual_aspects_sentences):
     print(aspect)
     print(cm[i])
     print()
+
