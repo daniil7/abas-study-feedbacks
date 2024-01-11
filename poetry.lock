@@ -857,6 +857,19 @@ files = [
 ]
 
 [[package]]
+name = "intervaltree"
+version = "3.1.0"
+description = "Editable interval tree data structure for Python 2 and 3"
+optional = false
+python-versions = "*"
+files = [
+    {file = "intervaltree-3.1.0.tar.gz", hash = "sha256:902b1b88936918f9b2a19e0e5eb7ccb430ae45cde4f39ea4b36932920d33952d"},
+]
+
+[package.dependencies]
+sortedcontainers = ">=2.0,<3.0"
+
+[[package]]
 name = "ipykernel"
 version = "6.27.1"
 description = "IPython Kernel for Jupyter"
@@ -888,6 +901,20 @@ docs = ["myst-parser", "pydata-sphinx-theme", "sphinx", "sphinx-autodoc-typehint
 pyqt5 = ["pyqt5"]
 pyside6 = ["pyside6"]
 test = ["flaky", "ipyparallel", "pre-commit", "pytest (>=7.0)", "pytest-asyncio", "pytest-cov", "pytest-timeout"]
+
+[[package]]
+name = "ipymarkup"
+version = "0.9.0"
+description = "NER, syntax tree markup visualisations for Jupyter Notebook"
+optional = false
+python-versions = "*"
+files = [
+    {file = "ipymarkup-0.9.0-py3-none-any.whl", hash = "sha256:6ef17080e7b2dd339634337e676c0a257c8ff6c8cb54884cff91011e5a15d3f6"},
+    {file = "ipymarkup-0.9.0.tar.gz", hash = "sha256:3f4bfa10fd66293201af8484a7e6bcb723bf2e33d9a6aa00882671af9ca26911"},
+]
+
+[package.dependencies]
+intervaltree = ">=3"
 
 [[package]]
 name = "ipython"
@@ -1524,6 +1551,39 @@ files = [
     {file = "murmurhash-1.0.10-cp39-cp39-win_amd64.whl", hash = "sha256:a4209962b9f85de397c3203ea4b3a554da01ae9fd220fdab38757d4e9eba8d1a"},
     {file = "murmurhash-1.0.10.tar.gz", hash = "sha256:5282aab1317804c6ebd6dd7f69f15ba9075aee671c44a34be2bde0f1b11ef88a"},
 ]
+
+[[package]]
+name = "natasha"
+version = "1.6.0"
+description = "Named-entity recognition for russian language"
+optional = false
+python-versions = "*"
+files = [
+    {file = "natasha-1.6.0-py3-none-any.whl", hash = "sha256:e12b130d05a0b4d2eb6442092ed5b5769a68a311c17f2095b1aa739fb8d6dc78"},
+    {file = "natasha-1.6.0.tar.gz", hash = "sha256:46082e6b382ad3a6bc07d8de4677c70f955347e5eb77ef0e0ac4147da18b12ad"},
+]
+
+[package.dependencies]
+ipymarkup = ">=0.8.0"
+navec = ">=0.9.0"
+pymorphy2 = "*"
+razdel = ">=0.5.0"
+slovnet = ">=0.6.0"
+yargy = ">=0.16.0"
+
+[[package]]
+name = "navec"
+version = "0.10.0"
+description = "Compact high quality word embeddings for russian language"
+optional = false
+python-versions = "*"
+files = [
+    {file = "navec-0.10.0-py3-none-any.whl", hash = "sha256:c4e24519ed5af3f6984f763c61c3a281b2923b59c72b88ea8c1c11aa81265e18"},
+    {file = "navec-0.10.0.tar.gz", hash = "sha256:4f23474b1c279af6c605f84e7873e87c47ca58b0c538a3f9d30d90c609c9fd21"},
+]
+
+[package.dependencies]
+numpy = "*"
 
 [[package]]
 name = "nbclient"
@@ -2611,6 +2671,17 @@ packaging = "*"
 test = ["pytest (>=6,!=7.0.0,!=7.0.1)", "pytest-cov (>=3.0.0)", "pytest-qt"]
 
 [[package]]
+name = "razdel"
+version = "0.5.0"
+description = "Splits russian text into tokens, sentences, section. Rule-based"
+optional = false
+python-versions = "*"
+files = [
+    {file = "razdel-0.5.0-py3-none-any.whl", hash = "sha256:76f59691c3216b47d32fef6274c18c12d61f602f1444b7ef4b135b03801f6d37"},
+    {file = "razdel-0.5.0.tar.gz", hash = "sha256:4334c0fdfe34d4e888cf0ed854968c9df14f0a547df909a77f4634f9ffe626e6"},
+]
+
+[[package]]
 name = "referencing"
 version = "0.32.0"
 description = "JSON Referencing + Python"
@@ -3204,6 +3275,22 @@ files = [
 ]
 
 [[package]]
+name = "slovnet"
+version = "0.6.0"
+description = "Deep-learning based NLP modeling for Russian language"
+optional = false
+python-versions = "*"
+files = [
+    {file = "slovnet-0.6.0-py3-none-any.whl", hash = "sha256:bdecc3d7cbe5758a675316855d988339592e657565c0f2bc84f5dadb2e056ea4"},
+    {file = "slovnet-0.6.0.tar.gz", hash = "sha256:02d2257bdc9b9cc1d242bd34ee2c861c648f7083ef7898fe1468abcc381ef799"},
+]
+
+[package.dependencies]
+navec = "*"
+numpy = "*"
+razdel = "*"
+
+[[package]]
 name = "smart-open"
 version = "6.4.0"
 description = "Utils for streaming large files (S3, HDFS, GCS, Azure Blob Storage, gzip, bz2...)"
@@ -3233,6 +3320,17 @@ python-versions = ">=3.7"
 files = [
     {file = "sniffio-1.3.0-py3-none-any.whl", hash = "sha256:eecefdce1e5bbfb7ad2eeaabf7c1eeb404d7757c379bd1f7e5cce9d8bf425384"},
     {file = "sniffio-1.3.0.tar.gz", hash = "sha256:e60305c5e5d314f5389259b7f22aaa33d8f7dee49763119234af3755c55b9101"},
+]
+
+[[package]]
+name = "sortedcontainers"
+version = "2.4.0"
+description = "Sorted Containers -- Sorted List, Sorted Dict, Sorted Set"
+optional = false
+python-versions = "*"
+files = [
+    {file = "sortedcontainers-2.4.0-py2.py3-none-any.whl", hash = "sha256:a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0"},
+    {file = "sortedcontainers-2.4.0.tar.gz", hash = "sha256:25caa5a06cc30b6b83d11423433f65d1f9d76c4c6a0c90e3379eaa43b9bfdb88"},
 ]
 
 [[package]]
@@ -4156,7 +4254,21 @@ files = [
     {file = "widgetsnbextension-4.0.9.tar.gz", hash = "sha256:3c1f5e46dc1166dfd40a42d685e6a51396fd34ff878742a3e47c6f0cc4a2a385"},
 ]
 
+[[package]]
+name = "yargy"
+version = "0.16.0"
+description = "Rule-based facts extraction for Russian language"
+optional = false
+python-versions = "*"
+files = [
+    {file = "yargy-0.16.0-py3-none-any.whl", hash = "sha256:7ca469fa47b336367fab49e8f33ccc195584f69ab758e8196f2fdaa7492adf22"},
+    {file = "yargy-0.16.0.tar.gz", hash = "sha256:c917eefb32a40c23c46b6ca88d68927072dd00ab94e90fd5dc6ab0a62b59b593"},
+]
+
+[package.dependencies]
+pymorphy2 = "*"
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "a208782ffa45c45d114a797ce3e70f95738257a396dbc53de09dfde27019a941"
+content-hash = "a567cf28ec4bb69862fd77922490e0f9961d71be095ca9a9db8ce527b73d5819"

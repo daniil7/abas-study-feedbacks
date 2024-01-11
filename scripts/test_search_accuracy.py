@@ -1,20 +1,19 @@
 from os import listdir
 from os.path import isfile, join
 from pathlib import Path
-
 import re
-import pathlib
 
 import torch
 import numpy as np
 from transformers import AutoTokenizer, AutoModel
 from natasha import Segmenter, MorphVocab, NewsEmbedding, NewsMorphTagger, Doc
 
-
 from sklearn.metrics import multilabel_confusion_matrix, classification_report
 from sklearn.preprocessing import MultiLabelBinarizer
 
 import pandas as pd
+
+from tqdm import tqdm
 
 # Подгружаем все размеченные аспекты из файлов и сохраняем в памяти
 
@@ -165,7 +164,7 @@ class MethodSimilarity():
                 aspects.append(similarity[0])
         return aspects
 
-    def process(self, text: str, min_similarity: int = 0.4):
+    def process(self, text: str, min_similarity: int = 0.3):
         return self.find_aspects(text, min_similarity)
 
 
@@ -177,32 +176,37 @@ similarity_acc_list = []
 
 print("Initialized")
 
-method = search_substring
+def make_report(method):
+    y_expected = []
+    y_predicted = []
 
-y_expected = []
-y_predicted = []
+    for sentence in tqdm(all_aspects_senteces):
+        y_expected.append(
+            [
+                aspect
+                for aspect in actual_aspects_sentences
+                if sentence in actual_aspects_sentences[aspect]
+            ]
+        )
+        y_predicted.append(method.process(sentence))
 
-for sentence in all_aspects_senteces:
-    y_expected.append(
-        [
-            aspect
-            for aspect in actual_aspects_sentences
-            if sentence in actual_aspects_sentences[aspect]
-        ]
-    )
-    y_predicted.append(method.process(sentence))
+    y_expected = MultiLabelBinarizer(classes=list(actual_aspects_sentences)).fit_transform(y_expected)
+    y_predicted = MultiLabelBinarizer(classes=list(actual_aspects_sentences)).fit_transform(y_predicted)
+        
+    report = classification_report(y_expected, y_predicted, target_names=list(actual_aspects_sentences), output_dict=True)
+    return report
 
-y_expected = MultiLabelBinarizer(classes=list(actual_aspects_sentences)).fit_transform(y_expected)
-y_predicted = MultiLabelBinarizer(classes=list(actual_aspects_sentences)).fit_transform(y_predicted)
-    
-report = classification_report(y_expected, y_predicted, target_names=list(actual_aspects_sentences), output_dict=True)
-
-df = pd.DataFrame(report).transpose()
-
+def save_report(report, name):
+    df = pd.DataFrame(report).transpose()
 # set precision for all numeric values to 2
-df[['precision', 'recall', 'f1-score']] = df[['precision', 'recall', 'f1-score']].applymap(lambda x: round(x, 2) if isinstance(x, float) else x)
+    df[['precision', 'recall', 'f1-score']] = df[['precision', 'recall', 'f1-score']].applymap(lambda x: round(x, 2) if isinstance(x, float) else x)
 
+    df.to_csv("scripts/output/report_" + name + ".csv")
 
-df.to_csv("report.csv")
+print("Calculating substring method accuracy...")
+report_substring = make_report(search_substring)
+save_report(report_substring, "substring")
 
-
+print("Calculating similarity method accuracy...")
+report_similarity = make_report(search_similarity)
+save_report(report_similarity, "similarity")

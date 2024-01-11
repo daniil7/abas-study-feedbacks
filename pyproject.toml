@@ -15,6 +15,7 @@ nltk = "^3.8.1"
 numpy = "^1.26.2"
 pymorphy2 = "^0.9.1"
 torch = {version = "^2.1.1+cu118", source = "torch_cuda"}
+natasha = "^1.6.0"
 
 [[tool.poetry.source]]
 name = "torch_cuda"
@@ -26,6 +27,7 @@ pylint = "^3.0.2"
 pke = {git = "https://github.com/boudinfl/pke.git"}
 jupyter = "^1.0.0"
 pandas = "^2.1.4"
+tqdm = "^4.66.1"
 
 [build-system]
 requires = ["poetry-core"]
