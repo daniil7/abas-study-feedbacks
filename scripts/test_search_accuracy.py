@@ -173,5 +173,11 @@ y_predicted = MultiLabelBinarizer(classes=list(actual_aspects_sentences)).fit_tr
 
 print(y_expected.shape)
 print(y_predicted.shape)
+cm = multilabel_confusion_matrix(y_expected, y_predicted)
 
-print(multilabel_confusion_matrix(y_expected, y_predicted))
+# print class name and cm[class] for each class
+
+for i, aspect in enumerate(actual_aspects_sentences):
+    print(aspect)
+    print(cm[i])
+    print()
