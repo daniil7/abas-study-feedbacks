@@ -14,6 +14,8 @@ from natasha import Segmenter, MorphVocab, NewsEmbedding, NewsMorphTagger, Doc
 from sklearn.metrics import multilabel_confusion_matrix, classification_report
 from sklearn.preprocessing import MultiLabelBinarizer
 
+import pandas as pd
+
 # Подгружаем все размеченные аспекты из файлов и сохраняем в памяти
 
 DATA_DIRECTORY = "stage_2_keywords_search/search_annotated/"
@@ -193,5 +195,14 @@ for sentence in all_aspects_senteces:
 y_expected = MultiLabelBinarizer(classes=list(actual_aspects_sentences)).fit_transform(y_expected)
 y_predicted = MultiLabelBinarizer(classes=list(actual_aspects_sentences)).fit_transform(y_predicted)
     
-report = classification_report(y_expected, y_predicted, target_names=list(actual_aspects_sentences))
-print(report)
+report = classification_report(y_expected, y_predicted, target_names=list(actual_aspects_sentences), output_dict=True)
+
+df = pd.DataFrame(report).transpose()
+
+# set precision for all numeric values to 2
+df[['precision', 'recall', 'f1-score']] = df[['precision', 'recall', 'f1-score']].applymap(lambda x: round(x, 2) if isinstance(x, float) else x)
+
+
+df.to_csv("report.csv")
+
+
