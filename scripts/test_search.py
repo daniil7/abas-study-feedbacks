@@ -15,7 +15,7 @@ search = Search()
 
 print("Initialized")
 
-RESULT_DIRECTORY = "scripts/output_test/"
+RESULT_DIRECTORY = "scripts/output/test_search/"
 
 Path(RESULT_DIRECTORY).mkdir(parents=True, exist_ok=True)
 

@@ -23,7 +23,7 @@ async def root(item: Item):
     else:
         search.set_aspects(default_aspects)
     result = {}
-    all_aspects = search.process(text)
+    all_aspects = search.process(text, 0.4)
     for aspect, sentences in all_aspects.items():
         if len(sentences) == 0:
             continue
