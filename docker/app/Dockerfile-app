@@ -14,7 +14,7 @@ COPY pyproject.toml poetry.lock ./
 RUN --mount=type=cache,target=${POETRY_CACHE_DIR} \
     poetry install --no-root --without dev
 
-COPY save_models.py ./
+COPY scripts/save_models.py ./
 RUN --mount=type=cache,target=${TRANSFORMERS_CACHE} \
      poetry run python save_models.py
 
@@ -31,8 +31,8 @@ WORKDIR /app
 COPY --from=backend-builder ${AI_MODELS} ${AI_MODELS}
 COPY --from=backend-builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY --from=backend-builder /root/nltk_data /root/nltk_data
-COPY ./data ./data
+COPY ./backend/data ./data
 COPY ./ai ./ai
-COPY ./web ./web
+COPY ./backend/web ./web
 
 CMD uvicorn web.main:app --host 0.0.0.0 --port 80 --log-level warning
