@@ -7,6 +7,37 @@
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents">%sveltekit.body%</div>
+		<main>%sveltekit.body%</main>
+        <footer>
+        </footer>
 	</body>
 </html>
+
+<style>
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+main {
+    flex-grow: 1;
+    margin-top: 2rem;
+    width: 60vw;
+    border-style: solid;
+    border-width: 2px;
+    border-color: black;
+    border-radius: 20px;
+}
+@media (max-width: 800px) {
+    main {
+        width: 100vw;
+        border-style: none;
+    }
+}
+footer {
+    height: 10vh;
+}
+
+</style>
