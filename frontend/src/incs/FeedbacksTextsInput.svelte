@@ -30,7 +30,6 @@
                 texts = [...texts, {id: end_id + 1, text: ""}];
             }
         }
-        console.log(texts);
     }
 
 </script>

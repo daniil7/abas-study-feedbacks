@@ -38,7 +38,7 @@
         <CancelButton on:click={cleanAspects} text="╳" />
     </div>
 
-    {#each aspects as aspect}
+    {#each aspects as aspect (aspect)}
         <div on:click={removeAspect} class="aspect">{aspect}</div>
     {/each}
 
