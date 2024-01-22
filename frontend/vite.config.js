@@ -1,6 +1,8 @@
-import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite'
+import { svelte } from '@sveltejs/vite-plugin-svelte'
 
-export default defineConfig({
-	plugins: [sveltekit()]
-});
+// https://vitejs.dev/config/
+export default ({ mode }) => {
+    process.env = {...process.env, ...loadEnv(mode, process.cwd()+'/..')};
+    return defineConfig({ plugins: [svelte()], });
+}

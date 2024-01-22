@@ -1,17 +1,16 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		%sveltekit.head%
+        <title>Keytokens analysis</title>
+        <script type="module" src="/src/main.js"></script>
 	</head>
-	<body data-sveltekit-preload-data="hover">
-		<main style="padding-left: 1rem; padding-right: 1rem;">
-            %sveltekit.body%
-        </main>
-        <footer>
-        </footer>
+	<body>
+        <header></header>
+        <div id="app"></div>
+        <footer></footer>
 	</body>
 </html>
 
@@ -23,9 +22,8 @@ body {
     align-items: center;
     height: 100vh;
 }
-main {
+div#app {
     flex-grow: 1;
-    margin-top: 2rem;
     width: 60vw;
     border-style: solid;
     border-width: 2px;
@@ -37,6 +35,9 @@ main {
         width: 100vw;
         border-style: none;
     }
+}
+header {
+    height: 5vh;
 }
 footer {
     height: 10vh;
