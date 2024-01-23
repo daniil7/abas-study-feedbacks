@@ -11,7 +11,6 @@
 
     async function retriveResult() {
         result = await api.retriveResult(texts, aspects.length > 0 ? aspects : null);
-        console.log(result);
     }
 </script>
 

@@ -1,12 +1,12 @@
 version: '3.8'
 services:
-    app:
-        image: keytokens-analysis-app
-        container_name: keytokens-analysis-app
+    backend:
+        image: keytokens-analysis-backend
+        container_name: keytokens-analysis-backend
         restart: unless-stopped
         build:
             context: .
-            dockerfile: docker/app/Dockerfile-app
+            dockerfile: docker/backend/Dockerfile-backend
         networks:
           - keytokens_analysis_net
 

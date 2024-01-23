@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.web.settings import settings
 from pydantic import BaseModel
 from pydantic import Field
 
+from backend.settings import settings
 from ai.search import MethodSimilarity
 from ai.emotional import Emotional
+
 
 app = FastAPI()
 
