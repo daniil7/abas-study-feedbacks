@@ -16,6 +16,7 @@ numpy = "^1.26.2"
 pymorphy2 = "^0.9.1"
 torch = {version = "^2.1.1+cu118", source = "torch_cuda"}
 natasha = "^1.6.0"
+pydantic-settings = "^2.1.0"
 
 [[tool.poetry.source]]
 name = "torch_cuda"
