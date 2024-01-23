@@ -6,11 +6,15 @@
     let aspects = [];
     let texts = [];
     let result = {};
+    let status = 'waiting';
 
     let api = new window.API();
 
     async function retriveResult() {
+        result = []
+        status = 'in-progress';
         result = await api.retriveResult(texts, aspects.length > 0 ? aspects : null);
+        status = 'waiting';
     }
 </script>
 
@@ -22,11 +26,17 @@
         <FeedbacksTextsInput bind:texts={texts} />
         <SubmitButton on:click={retriveResult} text="Submit" />
         <div>
+            {#if status == 'in-progress'}
+            <p>Request in progress...</p>
+            {:else}
             <ul>
                 {#each Object.entries(result) as [aspect, info], index (aspect) }
                 <li>{aspect} = {info.score}</li>
+                {:else}
+                <p>No results.</p>
                 {/each}
             </ul>
+            {/if}
         </div>
     </div>
 </main>
