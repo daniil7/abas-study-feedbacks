@@ -67,7 +67,7 @@ class MethodSubstring():
 
 class MethodSimilarity():
 
-    def tokenizer(self, sentence: str) -> torch.Tensor:
+    def transformers_tokenizer(self, sentence: str) -> torch.Tensor:
         tokens = self.transformers_auto_tokenizer(sentence, return_tensors='pt')
         vector = self.transformers_model(**tokens)[0].detach().squeeze()
         return torch.mean(vector, dim=0).numpy()
@@ -84,12 +84,15 @@ class MethodSimilarity():
         self.aspects_list = load_aspects()
 
         if tokenizer == "distiluse":
+            self.tokenizer = self.transformers_tokenizer
             self.transformers_auto_tokenizer = AutoTokenizer.from_pretrained("ai_models/sentence-transformers/distiluse-base-multilingual-cased-v2", local_files_only=True)
             self.transformers_model = AutoModel.from_pretrained("ai_models/sentence-transformers/distiluse-base-multilingual-cased-v2", local_files_only=True)
         elif tokenizer == "sbert-pq":
+            self.tokenizer = self.transformers_tokenizer
             self.transformers_auto_tokenizer = AutoTokenizer.from_pretrained("ai_models/inkoziev/sbert_pq", local_files_only=True)
             self.transformers_model = AutoModel.from_pretrained("ai_models/inkoziev/sbert_pq", local_files_only=True)
         else:
+            self.tokenizer = None
             raise Exception("Invalid tokenizer.")
 
     def calc_similarity(self, vector1, vector2):

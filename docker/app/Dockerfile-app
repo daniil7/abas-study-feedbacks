@@ -31,7 +31,7 @@ WORKDIR /app
 COPY --from=backend-builder ${AI_MODELS} ${AI_MODELS}
 COPY --from=backend-builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY --from=backend-builder /root/nltk_data /root/nltk_data
-COPY ./backend/data ./data
+COPY ./data ./data
 COPY ./ai ./ai
 COPY ./backend/web ./web
 
