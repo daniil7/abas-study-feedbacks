@@ -1,11 +1,11 @@
-import torch
+from torch import Tensor
 from typing import Optional, Callable
 
 def make_embeds_sim_classifier(
     classes: list[str], 
-    embeddings_model: Callable[[str], torch.FloatTensor],
+    embeddings_model: Callable[[str], Tensor],
     sim_threshold: float,
-    sim_metric: Callable[[torch.FloatTensor, torch.FloatTensor], float]
+    sim_metric: Callable[[Tensor, Tensor], float]
 ) -> Callable[[str], Optional[str]]:
     """
     Creates a classifier that classifies some text by relation to the one of aspects (classes).

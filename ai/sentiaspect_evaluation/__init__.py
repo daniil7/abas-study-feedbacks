@@ -1,0 +1,3 @@
+from ai.sentiaspect_evaluation.sentiaspect import SentiAspect
+from ai.sentiaspect_evaluation.aspect_rating import AspectRating
+from ai.sentiaspect_evaluation.sentiaspect_evaluator import make_sentiaspect_evaluator
