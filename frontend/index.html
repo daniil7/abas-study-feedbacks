@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Keytokens analysis</title>
+        <script type="module" src="/src/main.js"></script>
+	</head>
+	<body>
+        <header></header>
+        <div id="app"></div>
+        <footer></footer>
+	</body>
+</html>
+
+<style>
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+div#app {
+    flex-grow: 1;
+    width: 60vw;
+    border-style: solid;
+    border-width: 2px;
+    border-color: black;
+    border-radius: 20px;
+}
+header {
+    height: 5vh;
+}
+footer {
+    height: 10vh;
+}
+@media (max-width: 800px) {
+    div#app {
+        width: 100vw;
+        border-style: none;
+    }
+}
+@media (prefers-color-scheme: dark) {
+    div#app {
+        border-color: #9a9a9a;
+    }
+}
+
+</style>

@@ -17,7 +17,7 @@ from tqdm import tqdm
 
 # Подгружаем все размеченные аспекты из файлов и сохраняем в памяти
 
-DATA_DIRECTORY = "stage_2_keywords_search/search_annotated/"
+DATA_DIRECTORY = "research/stage_2_keywords_search/search_annotated/"
 
 segmenter = Segmenter()
 morph_vocab = MorphVocab()

@@ -99,7 +99,7 @@ class MethodSimilarity():
         return np.dot(vector1, vector2) / \
                (np.linalg.norm(vector1) * np.linalg.norm(vector2))
 
-    def find_aspects(self, text: str, min_similarity: int):
+    def find_aspects(self, text: str, min_similarity: float):
         aspects = {}
         for aspect in self.aspects_list:
             aspects[aspect] = []
@@ -115,5 +115,5 @@ class MethodSimilarity():
                     aspects[similarity[0]].append(sentence)
         return aspects
 
-    def process(self, text: str, min_similarity: int = 0.2):
+    def process(self, text: str, min_similarity: float = 0.2):
         return self.find_aspects(text, min_similarity)

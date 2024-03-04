@@ -1,0 +1,18 @@
+FROM node:21-alpine as frontend-build
+WORKDIR /app
+
+RUN apk add --no-cache brotli
+
+COPY frontend/package.json frontend/package-lock.json  ./
+RUN npm install
+
+COPY frontend/vite.config.js frontend/svelte.config.js frontend/jsconfig.json ./
+COPY frontend ./
+RUN npm run build
+
+RUN find ./dist -type f \
+        \( -name "*.js" -o -name "*.css" -o -name "*.ico" -o -name "*.svg" \) \
+        -exec brotli -f -k -Z {} +
+
+FROM nginx
+COPY --from=frontend-build /app/dist/ /usr/share/nginx/html/

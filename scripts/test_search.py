@@ -5,7 +5,7 @@ import pandas as pd
 
 from ai.search import MethodSimilarity as Search
 
-df = pd.read_csv("stage_1_keywords_extraction/Keyphrase extraction/data/all_dataset.csv", sep='\t', encoding="utf-8")
+df = pd.read_csv("research/stage_1_keywords_extraction/Keyphrase extraction/data/all_dataset.csv", sep='\t', encoding="utf-8")
 
 df = df[df["rubrics"].str.contains('образование_отзывус')].dropna().astype("str").reset_index()
 
