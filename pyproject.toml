@@ -14,14 +14,30 @@ sentence-transformers = "^2.2.2"
 nltk = "^3.8.1"
 numpy = "^1.26.2"
 pymorphy2 = "^0.9.1"
-torch = {version = "^2.1.1+cu118", source = "torch_cuda"}
 natasha = "^1.6.0"
 pydantic-settings = "^2.1.0"
 
-[[tool.poetry.source]]
-name = "torch_cuda"
-url = "https://download.pytorch.org/whl/cu118"
-priority = "supplemental"
+[[torch]]
+version = "^2.1.1+cpu"
+markers = "extra != 'cu121' and sys_platform == 'linux'"
+url = "https://download.pytorch.org/whl/cpu/torch-1.11.0%2Bcpu-cp310-cp310-linux_x86_64.whl"
+
+[[torch]]
+version = "^2.1.1+cu121"
+markers = "extra == 'cu121' and sys_platform == 'linux'"
+url = "https://download.pytorch.org/whl/cu121/torch-2.1.0%2Bcu121-cp310-cp310-linux_x86_64.whl"
+optional = true
+
+[[torch]]
+version = "^2.1.1+cpu"
+markers = "extra != 'cu121' and sys_platform == 'win32'"
+url = "https://download.pytorch.org/whl/cpu/torch-1.11.0%2Bcpu-cp310-cp310-win_amd64.whl"
+
+[[torch]]
+version = "^2.1.1+cu121"
+markers = "extra == 'cu121' and sys_platform == 'win32'"
+url = "https://download.pytorch.org/whl/cu121/torch-2.1.0%2Bcu121-cp310-cp310-win_amd64.whl"
+optional = true
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^3.0.2"
@@ -29,6 +45,9 @@ pke = {git = "https://github.com/boudinfl/pke.git"}
 jupyter = "^1.0.0"
 pandas = "^2.1.4"
 tqdm = "^4.66.1"
+
+[tool.poetry.extras]
+cu121 = ["torch"]
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,0 +1,1 @@
+from ai.aspect_classification.embeds_sim_classifier import make_embeds_sim_classifier
