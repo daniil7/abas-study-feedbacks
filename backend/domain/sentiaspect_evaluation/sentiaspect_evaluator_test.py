@@ -1,33 +1,47 @@
-import torch
-import torch.nn.functional as F
-from torch import Tensor
-from domain.sentiaspect_evaluation import evaluation_strategies
-
+import math
+import random
+from operator import itemgetter
+from itertools import groupby
+from typing import Optional
+from sentence_transformers.SentenceTransformer import Callable
 from domain.sentiaspect_evaluation.sentiaspect_evaluator import make_sentiaspect_evaluator
-from domain.aspect_classification.embeds_sim_classifier import make_embeds_sim_classifier
-from domain.sentiment_analysis.hf_sentiment_analyzer import make_hf_sentiment_analyzer
-from domain.sentiaspect_evaluation.evaluation_strategies.avg_evaluation_strategy import avg_evaluation_strategy
-from domain.text_segmentation.sentence_segmentizer import sentence_segmentizer
-from domain.sentiaspect_evaluation.aspect_rating import AspectRating
+from domain.sentiment_analysis.sentiment import Sentiment
+from domain.sentiaspect_evaluation import SentiAspect, AspectRating
 
-def dummy_embeddings_model(_: str) -> Tensor:
-    return torch.rand(10)
+def dummy_segmentizer(text: str):
+    batch_size = 10
+    num_splits = math.floor(len(text) / batch_size)
+    if num_splits > 0:
+        return [ text[i * batch_size : i + 1 * batch_size] for i in range(num_splits-1) ]
+    return [ text ]
 
-def cosine_similarity_metric(emb1: Tensor, emb2: Tensor) -> float:
-    return F.cosine_similarity(emb1, emb2, dim=0, eps=1e-8)
+def make_dummy_classifier(classes = list[str]) -> Callable[[str], Optional[str]]:
+    def dummy_classifier(_: str) -> Optional[str]:
+        if random.random() < 0.2:
+            return None
+        return random.choice(classes)
+    return dummy_classifier
+
+def dummy_sentiment_analyzer(_: str) -> Sentiment:
+    return random.choice([Sentiment.NEUTRAL, Sentiment.NEGATIVE, Sentiment.POSITIVE])
+
+def dummy_evaluation_strategy(sentiaspects: list[SentiAspect]) -> AspectRating:
+    key = itemgetter(0)
+    sentiaspects.sort(key=key)
+    return {
+        key: random.random()
+        for key, _ in groupby(sentiaspects, key=key)
+    }
 
 def test_sentiaspect_evaluator():
 
     evaluator = make_sentiaspect_evaluator(
-        segmentatizer=sentence_segmentizer,
-        aspect_classifier=make_embeds_sim_classifier(
+        segmentatizer=dummy_segmentizer,
+        aspect_classifier=make_dummy_classifier(
             classes=["груша", "яблоко", "банан"],
-            embeddings_model=dummy_embeddings_model,
-            sim_threshold=0.8,
-            sim_metric=cosine_similarity_metric,
         ),
-        sentiment_analyzer=make_hf_sentiment_analyzer("seninoseno/rubert-base-cased-sentiment-study-feedbacks-solyanka"),
-        evaluation_strategy=avg_evaluation_strategy
+        sentiment_analyzer=dummy_sentiment_analyzer,
+        evaluation_strategy=dummy_evaluation_strategy
     )
 
     result = evaluator("Пробное предложение номер один. Пробное предложение номер два. Пробное предложение номер три.")
