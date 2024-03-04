@@ -15,7 +15,7 @@ export default class API
                 text: texts.reduce(
                     (text, part) => text + part.text + ' ',
                     ''),
-                aspects_list: aspects
+                aspect_labels: aspects
             }),
           headers: {
               "Content-type": "application/json; charset=UTF-8"

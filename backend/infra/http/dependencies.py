@@ -1,11 +1,11 @@
+from functools import lru_cache
+from typing import Annotated, Callable, Optional
 from fastapi import Depends, Body
 from torch import Tensor, nn
-from functools import lru_cache
 from sentence_transformers import SentenceTransformer
-from typing import Annotated, Callable, Optional
 
 from domain.sentiaspect_evaluation import (
-    make_sentiaspect_evaluator, 
+    make_sentiaspect_evaluator,
     avg_evaluation_strategy,
     AspectRating
 )
@@ -16,13 +16,11 @@ from domain.sentiment_analysis import make_hf_sentiment_analyzer, Sentiment
 
 @lru_cache
 def get_embeddings_model() -> Callable[[str], Tensor]:
-    model = SentenceTransformer('cointegrated/rubert-tiny2')
+    model = SentenceTransformer("ai_models/sentence-transformers/distiluse-base-multilingual-cased-v2")
     def encode(s: str) -> Tensor:
         return model.encode(s, convert_to_tensor=True) # type: ignore
-    
     return encode
 
-@lru_cache
 def get_aspect_classifier(
     embeddings_model: Annotated[
         Callable[[str], Tensor],
@@ -35,10 +33,9 @@ def get_aspect_classifier(
 
 @lru_cache
 def get_sentiment_analyzer() -> Callable[[str], Sentiment]:
-    return make_hf_sentiment_analyzer('cointegrated/rubert-tiny2-sentiment')
+    return make_hf_sentiment_analyzer('seninoseno/rubert-base-cased-sentiment-study-feedbacks-solyanka')
 
 
-@lru_cache
 def get_sentiaspect_evaluator(
     aspect_classifier: Annotated[
         Callable[[str], str],

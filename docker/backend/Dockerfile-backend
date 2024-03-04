@@ -32,7 +32,6 @@ COPY --from=backend-builder ${AI_MODELS} ${AI_MODELS}
 COPY --from=backend-builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY --from=backend-builder /root/nltk_data /root/nltk_data
 COPY ./data ./data
-COPY ./ai ./ai
 COPY ./backend ./backend
 
-CMD uvicorn backend.main:app --host 0.0.0.0 --port 80 --log-level warning
+CMD cd backend && uvicorn infra.http.main:app --host 0.0.0.0 --port 80 --log-level warning
