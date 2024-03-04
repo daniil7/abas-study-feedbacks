@@ -6,9 +6,14 @@ from ai.sentiment_analysis import Sentiment
 from ai.sentiaspect_evaluation import SentiAspect, AspectRating
 
 def avg_evaluation_strategy(sentiaspects: list[SentiAspect]) -> AspectRating:
-    to_rating = lambda k: { 
-        Sentiment.POSITIVE: 1., Sentiment.NEUTRAL: 0., Sentiment.NEGATIVE: -1.
-    }[k]
+
+    def to_rating(sa: SentiAspect) -> float:
+        _, sentiment = sa
+
+        return {
+            Sentiment.POSITIVE: 1., Sentiment.NEUTRAL: 0., Sentiment.NEGATIVE: -1.
+        }[sentiment]
+    
 
     key = itemgetter(0)
     sentiaspects.sort(key=key) 
