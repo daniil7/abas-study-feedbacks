@@ -1,6 +1,6 @@
-from ai.sentiaspect_evaluation.evaluation_strategies.avg_evaluation_strategy import avg_evaluation_strategy
-from ai.sentiaspect_evaluation.sentiaspect import SentiAspect
-from ai.sentiment_analysis.sentiment import Sentiment
+from domain.sentiaspect_evaluation.evaluation_strategies.avg_evaluation_strategy import avg_evaluation_strategy
+from domain.sentiaspect_evaluation.sentiaspect import SentiAspect
+from domain.sentiment_analysis.sentiment import Sentiment
 
 
 def test_avg_evaluation_strategy():

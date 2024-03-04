@@ -4,15 +4,15 @@ from functools import lru_cache
 from sentence_transformers import SentenceTransformer
 from typing import Annotated, Callable, Optional
 
-from ai.sentiaspect_evaluation import (
+from domain.sentiaspect_evaluation import (
     make_sentiaspect_evaluator, 
     avg_evaluation_strategy,
     AspectRating
 )
 
-from ai.text_segmentation import sentence_segmentizer
-from ai.aspect_classification import make_embeds_sim_classifier
-from ai.sentiment_analysis import make_hf_sentiment_analyzer, Sentiment
+from domain.text_segmentation import sentence_segmentizer
+from domain.aspect_classification import make_embeds_sim_classifier
+from domain.sentiment_analysis import make_hf_sentiment_analyzer, Sentiment
 
 @lru_cache
 def get_embeddings_model() -> Callable[[str], Tensor]:

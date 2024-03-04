@@ -4,7 +4,7 @@ import torch
 import torch.nn.functional as F
 from torch import Tensor
 
-from ai.aspect_classification.embeds_sim_classifier import make_embeds_sim_classifier
+from domain.aspect_classification.embeds_sim_classifier import make_embeds_sim_classifier
 
 def dummy_embeddings_model(_: str) -> Tensor:
     return torch.rand(10)

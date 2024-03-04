@@ -2,8 +2,8 @@ from statistics import mean
 from itertools import groupby
 from operator import itemgetter
 
-from ai.sentiment_analysis import Sentiment
-from ai.sentiaspect_evaluation import SentiAspect, AspectRating
+from domain.sentiment_analysis import Sentiment
+from domain.sentiaspect_evaluation import SentiAspect, AspectRating
 
 def avg_evaluation_strategy(sentiaspects: list[SentiAspect]) -> AspectRating:
 

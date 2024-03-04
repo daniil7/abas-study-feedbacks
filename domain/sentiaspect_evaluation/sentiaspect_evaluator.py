@@ -1,7 +1,7 @@
 from typing import Callable, Optional
 
-from ai.sentiment_analysis import Sentiment
-from ai.sentiaspect_evaluation import SentiAspect, AspectRating
+from domain.sentiment_analysis import Sentiment
+from domain.sentiaspect_evaluation import SentiAspect, AspectRating
 
 
 def make_sentiaspect_evaluator(

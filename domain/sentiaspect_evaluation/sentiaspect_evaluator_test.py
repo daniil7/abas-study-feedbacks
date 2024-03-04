@@ -1,14 +1,14 @@
 import torch
 import torch.nn.functional as F
 from torch import Tensor
-from ai.sentiaspect_evaluation import evaluation_strategies
+from domain.sentiaspect_evaluation import evaluation_strategies
 
-from ai.sentiaspect_evaluation.sentiaspect_evaluator import make_sentiaspect_evaluator
-from ai.aspect_classification.embeds_sim_classifier import make_embeds_sim_classifier
-from ai.sentiment_analysis.hf_sentiment_analyzer import make_hf_sentiment_analyzer
-from ai.sentiaspect_evaluation.evaluation_strategies.avg_evaluation_strategy import avg_evaluation_strategy
-from ai.text_segmentation.sentence_segmentizer import sentence_segmentizer
-from ai.sentiaspect_evaluation.aspect_rating import AspectRating
+from domain.sentiaspect_evaluation.sentiaspect_evaluator import make_sentiaspect_evaluator
+from domain.aspect_classification.embeds_sim_classifier import make_embeds_sim_classifier
+from domain.sentiment_analysis.hf_sentiment_analyzer import make_hf_sentiment_analyzer
+from domain.sentiaspect_evaluation.evaluation_strategies.avg_evaluation_strategy import avg_evaluation_strategy
+from domain.text_segmentation.sentence_segmentizer import sentence_segmentizer
+from domain.sentiaspect_evaluation.aspect_rating import AspectRating
 
 def dummy_embeddings_model(_: str) -> Tensor:
     return torch.rand(10)
