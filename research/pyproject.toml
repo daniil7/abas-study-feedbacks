@@ -6,25 +6,11 @@ authors = ["daniil7 <daniil.k@mail.ru>", "bulatovv <albert.fz@yandex.ru>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
-fastapi = "^0.104.1"
-transformers = "^4.35.2"
-uvicorn = "^0.24.0.post1"
-sentence-transformers = "^2.2.2"
-nltk = "^3.8.1"
-numpy = "^1.26.2"
-pymorphy2 = "^0.9.1"
-natasha = "^1.6.0"
-pydantic-settings = "^2.1.0"
+pke = {git = "https://github.com/boudinfl/pke.git"}
+jupyter = "^1.0.0"
+pandas = "^2.1.4"
+tqdm = "^4.66.1"
 
-[tool.poetry.group.dev.dependencies]
-pylint = "^3.0.2"
-
-[tool.poetry.group.test.dependencies]
-pytest = "^8.0.2"
-
-[tool.poetry.extras]
-cu121 = ["torch"]
 
 [[torch]]
 version = "^2.1.1+cpu"
@@ -47,6 +33,10 @@ version = "^2.1.1+cu121"
 markers = "extra == 'cu121' and sys_platform == 'win32'"
 url = "https://download.pytorch.org/whl/cu121/torch-2.1.0%2Bcu121-cp310-cp310-win_amd64.whl"
 optional = true
+
+[tool.poetry.extras]
+cu121 = ["torch"]
+
 
 [build-system]
 requires = ["poetry-core"]
