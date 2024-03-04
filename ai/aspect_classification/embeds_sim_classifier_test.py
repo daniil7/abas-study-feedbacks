@@ -6,7 +6,7 @@ from torch import Tensor
 
 from ai.aspect_classification.embeds_sim_classifier import make_embeds_sim_classifier
 
-def dummy_embeddings_model(_: str):
+def dummy_embeddings_model(_: str) -> Tensor:
     return torch.rand(10)
 
 def cosine_similarity_metric(emb1: Tensor, emb2: Tensor) -> float:
@@ -24,5 +24,4 @@ def test_embeds_sim_classifier():
     assert callable(classifier)
     for _ in range(20):
         result = classifier(secrets.token_hex(16))
-        print(result)
         assert (isinstance(result, str) and result in classes) or result is None
