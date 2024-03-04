@@ -30,17 +30,22 @@ div#app {
     border-color: black;
     border-radius: 20px;
 }
-@media (max-width: 800px) {
-    main {
-        width: 100vw;
-        border-style: none;
-    }
-}
 header {
     height: 5vh;
 }
 footer {
     height: 10vh;
+}
+@media (max-width: 800px) {
+    div#app {
+        width: 100vw;
+        border-style: none;
+    }
+}
+@media (prefers-color-scheme: dark) {
+    div#app {
+        border-color: #9a9a9a;
+    }
 }
 
 </style>

@@ -56,4 +56,11 @@
         margin: .25rem .25rem .25rem 0;
         user-select: none;
     }
+    @media (prefers-color-scheme: dark) {
+        .aspect {
+            background-color: #3b3b3b;
+            border-color: #858585;
+            color: white;
+        }
+    }
 </style>
