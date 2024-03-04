@@ -13,10 +13,9 @@ def avg_evaluation_strategy(sentiaspects: list[SentiAspect]) -> AspectRating:
         return {
             Sentiment.POSITIVE: 1., Sentiment.NEUTRAL: 0., Sentiment.NEGATIVE: -1.
         }[sentiment]
-    
 
     key = itemgetter(0)
-    sentiaspects.sort(key=key) 
+    sentiaspects.sort(key=key)
 
     return {
         key: mean(map(to_rating, group))
