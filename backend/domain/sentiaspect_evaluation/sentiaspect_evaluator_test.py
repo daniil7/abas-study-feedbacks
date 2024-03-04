@@ -1,12 +1,12 @@
 import math
+import random
 from operator import itemgetter
 from itertools import groupby
-import random
 from typing import Optional
 from sentence_transformers.SentenceTransformer import Callable
-from ai.sentiaspect_evaluation.sentiaspect_evaluator import make_sentiaspect_evaluator
-from ai.sentiment_analysis.sentiment import Sentiment
-from ai.sentiaspect_evaluation import SentiAspect, AspectRating
+from domain.sentiaspect_evaluation.sentiaspect_evaluator import make_sentiaspect_evaluator
+from domain.sentiment_analysis.sentiment import Sentiment
+from domain.sentiaspect_evaluation import SentiAspect, AspectRating
 
 def dummy_segmentizer(text: str):
     batch_size = 10

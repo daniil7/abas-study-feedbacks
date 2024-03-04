@@ -1,14 +1,14 @@
 from transformers import pipeline
 from typing import Callable
 
-from ai.sentiment_analysis.sentiment import Sentiment
+from domain.sentiment_analysis.sentiment import Sentiment
 
 
 def make_hf_sentiment_analyzer(model_name: str) -> Callable[[str], Sentiment]:
     """
     Creates a HuggingFace AI model for sentiment analysing of given text.
 
-    :param str model_name: An ai model that located in ai_modes/... in the form of <huggingface_username>/<model_name>
+    :param str model_name: An domain model that located in ai_modes/... in the form of <huggingface_username>/<model_name>
     :return: Sentiment classifier
     :rtype: Callable[[str], Sentiment]
     """

@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.settings import settings
-from backend.routes import router
+from infra.settings import settings
+from infra.http.routes import router
 
 app = FastAPI()
 

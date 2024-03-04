@@ -1,4 +1,4 @@
-from ai.text_segmentation.sentence_segmentizer import sentence_segmentizer
+from domain.text_segmentation.sentence_segmentizer import sentence_segmentizer
 
 def test_sentence_segmentizer():
     data_input = """

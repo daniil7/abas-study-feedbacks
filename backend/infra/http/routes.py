@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, Body
 from typing import Annotated, Callable
 
-from ai.sentiaspect_evaluation import AspectRating
+from domain.sentiaspect_evaluation import AspectRating
 
-from backend.dependencies import get_sentiaspect_evaluator
+from infra.http.dependencies import get_sentiaspect_evaluator
 
 router = APIRouter()
 
