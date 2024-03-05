@@ -1,3 +1,4 @@
+import os
 from transformers import pipeline
 from typing import Callable
 
@@ -12,7 +13,7 @@ def make_hf_sentiment_analyzer(model_name: str) -> Callable[[str], Sentiment]:
     :return: Sentiment classifier
     :rtype: Callable[[str], Sentiment]
     """
-    model = pipeline("text-classification", "ai_models/"+model_name)
+    model = pipeline("text-classification", os.path.join("saved_models", model_name))
     def hf_sentiment_analyzer(text: str) -> Sentiment:
         result = model(text)[0]
         label = result['label']

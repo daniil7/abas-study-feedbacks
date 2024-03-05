@@ -3,7 +3,7 @@ import os
 from transformers import pipeline
 from sentence_transformers import SentenceTransformer
 
-MODELS_PATH="infra/models"
+MODELS_PATH="saved_models"
 
 MODELS_SENTIMENT = [
     "seninoseno/rubert-base-cased-sentiment-study-feedbacks-solyanka", # emotional analysis

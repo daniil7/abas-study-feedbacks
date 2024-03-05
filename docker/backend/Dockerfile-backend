@@ -1,6 +1,6 @@
 FROM python:3.11-slim as backend-builder
 
-RUN pip install poetry==1.6.1
+RUN pip install poetry==1.8.2
 
 ENV POETRY_VIRTUALENVS_IN_PROJECT=true \
     POETRY_CACHE_DIR='/tmp/poetry_cache_keytokens_analysis' \
@@ -12,25 +12,23 @@ RUN touch README.md
 
 COPY pyproject.toml poetry.lock ./
 RUN --mount=type=cache,target=${POETRY_CACHE_DIR} \
-    poetry install --no-root --without dev
+    poetry install --no-root --without dev test
 
 COPY scripts/save_models.py ./
 RUN --mount=type=cache,target=${TRANSFORMERS_CACHE} \
-     poetry run python save_models.py
-
-RUN poetry run python -c "import nltk; nltk.download('punkt');"
+     poetry run python -m infra.scripts.save_models
 
 FROM python:3.11-slim
 
 ENV VIRTUAL_ENV='/app/.venv' \
-    AI_MODELS='/app/ai_models' \
+    AI_MODELS='/app/saved_models' \
     PATH=/app/.venv/bin:$PATH
 
 WORKDIR /app
 
 COPY --from=backend-builder ${AI_MODELS} ${AI_MODELS}
 COPY --from=backend-builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-COPY --from=backend-builder /root/nltk_data /root/nltk_data
+
 COPY ./data ./data
 COPY ./backend ./backend
 

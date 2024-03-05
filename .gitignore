@@ -3,5 +3,5 @@
 
 .env
 
-ai_models
+backend/saved_models
 data
