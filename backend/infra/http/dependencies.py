@@ -13,7 +13,16 @@ from domain.sentiaspect_evaluation import (
 from domain.text_segmentation import sentence_segmentizer
 from domain.aspect_classification import make_embeds_sim_classifier
 from domain.sentiment_analysis import make_hf_sentiment_analyzer, Sentiment
-from domain.load_data.load_aspects import load_aspects
+from infra.load_data.load_aspects import load_aspects
+
+loaded_aspects = load_aspects()
+def get_aspects_labels(
+    aspect_labels: Annotated[list[str], Body(description="Список слов, отражающих тот или иной аспект.")]
+) -> list[str]:
+    if len(aspect_labels) == 0:
+        return loaded_aspects
+
+    return aspect_labels
 
 # Cache the models to avoid reinitialization on every request
 @lru_cache
@@ -32,10 +41,11 @@ def get_aspect_classifier(
         Callable[[str], Tensor],
         Depends(get_embeddings_model),
     ],
-    aspect_labels: Annotated[list[str], Body(description="Список слов, отражающих тот или иной аспект.")]
+    aspect_labels: Annotated[
+        list[str], 
+        Depends(get_aspects_labels)
+    ] 
 ) -> Callable[[str], Optional[str]]:
-    if len(aspect_labels) == 0:
-        aspect_labels = load_aspects()
     return make_embeds_sim_classifier(aspect_labels, embeddings_model, 0.3, nn.CosineSimilarity(dim=0))
 
 
