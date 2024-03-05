@@ -22,6 +22,8 @@ pylint = "^3.0.2"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.0.2"
+pytest-integration = "^0.2.3"
+httpx = "^0.27.0"
 
 [tool.poetry.extras]
 cu121 = ["torch"]
