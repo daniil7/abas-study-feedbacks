@@ -17,7 +17,7 @@ from domain.sentiment_analysis import make_hf_sentiment_analyzer, Sentiment
 # Cache the models to avoid reinitialization on every request 
 @lru_cache
 def get_embeddings_model() -> Callable[[str], Tensor]:
-    model = SentenceTransformer("sentence-transformers/distiluse-base-multilingual-cased-v2")
+    model = SentenceTransformer("saved_models/sentence-transformers/distiluse-base-multilingual-cased-v2")
     def encode(s: str) -> Tensor:
         return model.encode(s, convert_to_tensor=True) # type: ignore
     return encode
