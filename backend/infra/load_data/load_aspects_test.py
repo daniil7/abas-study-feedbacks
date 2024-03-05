@@ -1,4 +1,4 @@
-from domain.load_data.load_aspects import load_aspects
+from infra.load_data.load_aspects import load_aspects
 
 def test_load_aspects():
     aspects = load_aspects()
