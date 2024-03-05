@@ -7,7 +7,7 @@ export default class API
             this.url = '/api';
         }
     }
-    async retriveResult(texts, aspects = null)
+    async retriveResult(texts, aspects = [])
     {
         return await (await fetch(this.url + "/", {
           method: "POST",

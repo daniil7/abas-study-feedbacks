@@ -13,7 +13,7 @@
     async function retriveResult() {
         result = []
         status = 'in-progress';
-        result = await api.retriveResult(texts, aspects.length > 0 ? aspects : null);
+        result = await api.retriveResult(texts, aspects.length > 0 ? aspects : []);
         status = 'waiting';
     }
 </script>
@@ -31,7 +31,7 @@
             {:else}
             <ul>
                 {#each Object.entries(result) as [aspect, info], index (aspect) }
-                <li>{aspect} = {info.score}</li>
+                <li>{aspect} = {info}</li>
                 {:else}
                 <p>No results.</p>
                 {/each}

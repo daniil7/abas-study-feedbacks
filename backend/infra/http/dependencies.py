@@ -13,8 +13,9 @@ from domain.sentiaspect_evaluation import (
 from domain.text_segmentation import sentence_segmentizer
 from domain.aspect_classification import make_embeds_sim_classifier
 from domain.sentiment_analysis import make_hf_sentiment_analyzer, Sentiment
+from domain.load_data.load_aspects import load_aspects
 
-# Cache the models to avoid reinitialization on every request 
+# Cache the models to avoid reinitialization on every request
 @lru_cache
 def get_embeddings_model() -> Callable[[str], Tensor]:
     model = SentenceTransformer("saved_models/sentence-transformers/distiluse-base-multilingual-cased-v2")
@@ -33,6 +34,8 @@ def get_aspect_classifier(
     ],
     aspect_labels: Annotated[list[str], Body(description="Список слов, отражающих тот или иной аспект.")]
 ) -> Callable[[str], Optional[str]]:
+    if len(aspect_labels) == 0:
+        aspect_labels = load_aspects()
     return make_embeds_sim_classifier(aspect_labels, embeddings_model, 0.3, nn.CosineSimilarity(dim=0))
 
 
