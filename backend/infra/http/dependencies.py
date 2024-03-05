@@ -33,7 +33,7 @@ def get_aspect_classifier(
     ],
     aspect_labels: Annotated[list[str], Body(description="Список слов, отражающих тот или иной аспект.")]
 ) -> Callable[[str], Optional[str]]:
-    return make_embeds_sim_classifier(aspect_labels, embeddings_model, 0.3, nn.CosineSimilarity())
+    return make_embeds_sim_classifier(aspect_labels, embeddings_model, 0.3, nn.CosineSimilarity(dim=0))
 
 
 def get_sentiaspect_evaluator(
