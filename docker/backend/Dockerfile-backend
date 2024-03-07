@@ -10,13 +10,13 @@ WORKDIR /app
 
 RUN touch README.md
 
-COPY pyproject.toml poetry.lock ./
+COPY backend/pyproject.toml backend/poetry.lock ./
 RUN --mount=type=cache,target=${POETRY_CACHE_DIR} \
-    poetry install --no-root --without dev test
+    poetry install --no-root --without dev,test
 
-COPY scripts/save_models.py ./
+COPY backend/infra/scripts/save_models.py ./
 RUN --mount=type=cache,target=${TRANSFORMERS_CACHE} \
-     poetry run python -m infra.scripts.save_models
+     poetry run python -m save_models
 
 FROM python:3.11-slim
 
@@ -29,7 +29,8 @@ WORKDIR /app
 COPY --from=backend-builder ${AI_MODELS} ${AI_MODELS}
 COPY --from=backend-builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
-COPY ./data ./data
-COPY ./backend ./backend
+COPY ./backend/data ./data
+COPY ./backend/domain ./domain
+COPY ./backend/infra ./infra
 
-CMD cd backend && uvicorn infra.http.main:app --host 0.0.0.0 --port 80 --log-level warning
+CMD uvicorn infra.http.main:app --host 0.0.0.0 --port 80 --log-level warning
