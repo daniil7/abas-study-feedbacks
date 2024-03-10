@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+    abas-study-feedbacks-backend:
+        image: abas-study-feedbacks-backend
+        container_name: abas-study-feedbacks-backend
+        restart: unless-stopped
+        build:
+            context: ..
+            dockerfile: docker/backend/Dockerfile-backend
+        networks:
+          - abas_study_feedbacks_net
+
+    abas-study-feedbacks-frontend:
+        image: abas-study-feedbacks-frontend
+        container_name: abas-study-feedbacks-frontend
+        restart: unless-stopped
+        build:
+            context: ..
+            dockerfile: docker/frontend/Dockerfile-frontend
+        networks:
+          - abas_study_feedbacks_net
+        environment:
+          VITE_API_URL: ${VITE_API_URL}
+
+    abas-study-feedbacks-nginx:
+        container_name: abas-study-feedbacks-reverse-proxy
+        image: nginx:latest
+        volumes:
+          - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+        ports:
+          - 80:80
+        networks:
+          - abas_study_feedbacks_net
+        environment:
+          NGINX_SERVER_NAME: ${NGINX_SERVER_NAME}
+
+networks:
+    abas_study_feedbacks_net:
+        name: 'abas_study_feedbacks_net'

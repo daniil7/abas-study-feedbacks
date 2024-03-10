@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+    backend:
+        image: abas-study-feedbacks-backend
+        container_name: abas-study-feedbacks-backend
+        restart: unless-stopped
+        build:
+            context: ..
+            dockerfile: docker/backend/Dockerfile-backend
+        networks:
+          - otzyvus_modules_net
+
+networks:
+    otzyvus_submodules_net:
+        name: 'otzyvus_submodules_net'
+        external: true
