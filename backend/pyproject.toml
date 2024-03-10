@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "keytokens-analysis"
+name = "abas-study-feedbacks"
 version = "0.1.0"
 description = ""
 authors = ["daniil7 <daniil.k@mail.ru>", "bulatovv <albert.fz@yandex.ru>"]
