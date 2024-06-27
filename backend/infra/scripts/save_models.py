@@ -1,12 +1,13 @@
 import os
 
-from transformers import pipeline
+from transformers import pipeline, AutoModel
 from sentence_transformers import SentenceTransformer
 
 MODELS_PATH="saved_models"
 
 MODELS_SENTIMENT = [
     "seninoseno/rubert-base-cased-sentiment-study-feedbacks-solyanka", # emotional analysis
+    "danil7/rubert-base-cased-absa-study-feedbacks", # absa analysis
 ]
 
 MODELS_SENTENCE = [

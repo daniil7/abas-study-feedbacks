@@ -13,7 +13,10 @@
     async function retriveResult() {
         result = []
         status = 'in-progress';
-        result = await api.retriveResult(texts, aspects.length > 0 ? aspects : []);
+        result = await api.retriveResult(
+            texts.slice(0, texts.length-1).map(t => t.text),
+            aspects.length > 0 ? aspects : []
+        );
         status = 'waiting';
     }
 </script>

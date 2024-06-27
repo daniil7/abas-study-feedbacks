@@ -1,0 +1,1 @@
+from domain.absa_analyser.hf_absa_analyser import make_hf_absa_analyzer

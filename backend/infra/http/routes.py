@@ -9,13 +9,13 @@ router = APIRouter()
 
 @router.post("/")
 async def root(
-    text: Annotated[str, Body(description="Текст отзыва")],
+    texts: Annotated[list[str], Body(description="Текст отзыва")],
     sentiaspect_evaluator: Annotated[
-        Callable[[str], AspectRating],
+        Callable[[list[str]], AspectRating],
         Depends(get_sentiaspect_evaluator),
     ]
 ) -> AspectRating:
     """
     Аспектно-сентиментный анализ отзыва.
     """
-    return sentiaspect_evaluator(text)
+    return sentiaspect_evaluator(texts)

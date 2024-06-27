@@ -1,5 +1,5 @@
 from functools import lru_cache
-from typing import Annotated, Callable, Optional
+from typing import Annotated, Callable, Optional, Iterable 
 from fastapi import Depends, Body
 from torch import Tensor, nn
 from sentence_transformers import SentenceTransformer
@@ -13,16 +13,20 @@ from domain.sentiaspect_evaluation import (
 from domain.text_segmentation import sentence_segmentizer
 from domain.aspect_classification import make_embeds_sim_classifier
 from domain.sentiment_analysis import make_hf_sentiment_analyzer, Sentiment
+from domain.absa_analyser import make_hf_absa_analyzer
+from domain.combined_sentiaspect_evaluation import make_combined_sentiaspect_evaluator
+from domain.sentiaspect_evaluation import SentiAspect
 from infra.load_data.load_aspects import load_aspects
+from infra.settings import settings
 
 loaded_aspects = load_aspects()
 def get_aspects_labels(
     aspect_labels: Annotated[list[str], Body(description="Список слов, отражающих тот или иной аспект.")]
-) -> list[str]:
+) -> Iterable[str]:
     if len(aspect_labels) == 0:
-        return loaded_aspects
+        return tuple(loaded_aspects)
 
-    return aspect_labels
+    return tuple(aspect_labels)
 
 # Cache the models to avoid reinitialization on every request
 @lru_cache
@@ -35,6 +39,12 @@ def get_embeddings_model() -> Callable[[str], Tensor]:
 @lru_cache
 def get_sentiment_analyzer() -> Callable[[str], Sentiment]:
     return make_hf_sentiment_analyzer('seninoseno/rubert-base-cased-sentiment-study-feedbacks-solyanka')
+
+@lru_cache
+def get_absa_analyser(
+        aspects_labels: Annotated[list[str], Depends(get_aspects_labels)]
+    ) -> Callable[[str], list[SentiAspect]]:
+    return make_hf_absa_analyzer('checkpoint-3960', aspects_labels)
 
 def get_aspect_classifier(
     embeddings_model: Annotated[
@@ -57,8 +67,19 @@ def get_sentiaspect_evaluator(
     sentiment_analyzer: Annotated[
         Callable[[str], Sentiment],
         Depends(get_sentiment_analyzer),
+    ],
+    absa_analyser: Annotated[
+        Callable[[str], list[SentiAspect]],
+        Depends(get_absa_analyser),
     ]
-) -> Callable[[str], AspectRating]:
-    return make_sentiaspect_evaluator(
-        sentence_segmentizer, aspect_classifier, sentiment_analyzer, avg_evaluation_strategy
-    )
+) -> Callable[[list[str]], AspectRating]:
+    if settings.evaluator == "pipeline":
+        return make_sentiaspect_evaluator(
+            sentence_segmentizer, aspect_classifier, sentiment_analyzer, avg_evaluation_strategy
+        )
+    elif settings.evaluator == "combined":
+        return make_combined_sentiaspect_evaluator(
+            absa_analyser, avg_evaluation_strategy
+        )
+    else:
+        raise ValueError("Wrong evaluator!")

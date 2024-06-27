@@ -3,18 +3,16 @@ export default class API
     constructor()
     {
         this.url = import.meta.env.VITE_API_URL;
-        if (typeof this.url == 'undefined') {
+        if (typeof this.url === 'undefined') {
             this.url = '/api';
         }
     }
     async retriveResult(texts, aspects = [])
     {
-        return await (await fetch(this.url + "/", {
+        return await (await fetch(`${this.url}/`, {
           method: "POST",
             body: JSON.stringify({
-                text: texts.reduce(
-                    (text, part) => text + part.text + ' ',
-                    ''),
+                texts: texts,
                 aspect_labels: aspects
             }),
           headers: {

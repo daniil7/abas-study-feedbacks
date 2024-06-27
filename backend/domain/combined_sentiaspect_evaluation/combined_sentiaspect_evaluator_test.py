@@ -44,6 +44,6 @@ def test_sentiaspect_evaluator():
         evaluation_strategy=dummy_evaluation_strategy
     )
 
-    result = evaluator(["Пробное предложение номер один.", "Пробное предложение номер два.", "Пробное предложение номер три."])
+    result = evaluator("Пробное предложение номер один. Пробное предложение номер два. Пробное предложение номер три.")
 
     assert isinstance(result, dict)
