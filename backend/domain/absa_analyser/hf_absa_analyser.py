@@ -22,7 +22,6 @@ def make_hf_absa_analyzer(model_name: str, aspects: list[str]) -> Callable[[str]
         for aspect in aspects:
             result = model({'text': text, 'text_pair': aspect})
             label = result['label']
-            print(text, aspect, label)
             if label == 'NOT-PRESENT':
                 continue
             elif label == 'NEGATIVE':

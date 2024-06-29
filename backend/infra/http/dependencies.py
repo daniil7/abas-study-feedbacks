@@ -19,12 +19,11 @@ from domain.sentiaspect_evaluation import SentiAspect
 from infra.load_data.load_aspects import load_aspects
 from infra.settings import settings
 
-loaded_aspects = load_aspects()
 def get_aspects_labels(
     aspect_labels: Annotated[list[str], Body(description="Список слов, отражающих тот или иной аспект.")]
 ) -> Iterable[str]:
     if len(aspect_labels) == 0:
-        return tuple(loaded_aspects)
+        return tuple(load_aspects())
 
     return tuple(aspect_labels)
 
@@ -44,7 +43,7 @@ def get_sentiment_analyzer() -> Callable[[str], Sentiment]:
 def get_absa_analyser(
         aspects_labels: Annotated[list[str], Depends(get_aspects_labels)]
     ) -> Callable[[str], list[SentiAspect]]:
-    return make_hf_absa_analyzer('checkpoint-3960', aspects_labels)
+    return make_hf_absa_analyzer('danil7/rubert-base-cased-absa-study-feedbacks', aspects_labels)
 
 def get_aspect_classifier(
     embeddings_model: Annotated[

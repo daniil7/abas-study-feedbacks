@@ -3,12 +3,13 @@
     import FeedbacksTextsInput from './incs/FeedbacksTextsInput.svelte';
     import SubmitButton from './components/SubmitButton.svelte';
 
-    let aspects = [];
+    let api = new window.API();
+
+    let aspects = []
+    
     let texts = [];
     let result = {};
     let status = 'waiting';
-
-    let api = new window.API();
 
     async function retriveResult() {
         result = []
@@ -19,6 +20,10 @@
         );
         status = 'waiting';
     }
+
+    (async () => {
+        aspects = await api.retriveAspects();
+    })();
 </script>
 
 <main>

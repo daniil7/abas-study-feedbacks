@@ -8,4 +8,4 @@ def load_aspects():
             aspects = f.read().split('\n')
     else:
         aspects = []
-    return filter(lambda s: len(s) > 0, aspects)
+    return list(filter(lambda s: len(s) > 0, aspects))

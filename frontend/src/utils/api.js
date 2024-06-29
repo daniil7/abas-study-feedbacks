@@ -7,6 +7,7 @@ export default class API
             this.url = '/api';
         }
     }
+
     async retriveResult(texts, aspects = [])
     {
         return await (await fetch(`${this.url}/`, {
@@ -17,6 +18,15 @@ export default class API
             }),
           headers: {
               "Content-type": "application/json; charset=UTF-8"
+          }
+        })).json();
+    }
+
+    async retriveAspects()
+    {
+        return await (await fetch(`${this.url}/aspects`, {
+          method: "GET",
+          headers: {
           }
         })).json();
     }
